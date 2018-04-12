@@ -1,0 +1,72 @@
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th class="hidden">Id</th>
+    <th>Name</th>
+    <th>Address</th>
+    <th>Expiration Date</th>
+    <th>Number of users</th>
+    <th>Phone</th>
+    <th>Status</th>
+    <th>Edit</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let company of companies">
+    <td class="hidden">{{ company.idCompanies }}</td>
+    <td>{{ company.companyName }}</td>
+    <td>{{ company.address }}</td>
+    <td>{{ company.expirationDate }}</td>
+    <td>{{ company.numberOfUsers }}</td>
+    <td>{{ company.phone }}</td>
+    <td>{{ company.statusCode === 1 ? 'Inactive' : 'Active' }}</td>
+    <td>
+      <button class="btn btn-success" (click)="openEditMode(company)">Edit</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="col-md-8" *ngIf="editMode">
+  <h2 class="text-center">Edit Company</h2>
+  <form>
+    <div class="form-group">
+      <label for="name">Company name:</label>
+      <input  [(ngModel)]="companyForEdit.companyName"  name="name" class="form-control" id="name">
+    </div>
+
+    <div class="form-group">
+      <label for="address">Address:</label>
+      <input [(ngModel)]="companyForEdit.address"  name="address" class="form-control" id="address">
+    </div>
+
+
+    <div class="form-group">
+      <label for="expirationDate">Expiration date:</label>
+      <input [(ngModel)]="companyForEdit.expirationDate"  name="expirationDate" class="form-control" id="expirationDate">
+    </div>
+
+    <div class="form-group">
+      <label for="numberOfUsers">Number of users:</label>
+      <input type="number" [(ngModel)]="companyForEdit.numberOfUsers"  name="expirationDate" class="form-control" id="numberOfUsers">
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone:</label>
+      <input  [(ngModel)]="companyForEdit.phone"  name="expirationDate" class="form-control" id="phone">
+    </div>
+
+    <div class="form-group">
+      <label for="statusCode">Status:</label>
+      <input type="number" [(ngModel)]="companyForEdit.statusCode"  name="expirationDate" class="form-control" id="statusCode">
+    </div>
+
+    <button   class="btn btn-success" (click)="saveEditedCompany()">Save</button>
+    <button type="button"  class="btn btn-info" (click)="cancelEditCompany()">Cancel</button>
+
+
+  </form>
+</div>
+
+
