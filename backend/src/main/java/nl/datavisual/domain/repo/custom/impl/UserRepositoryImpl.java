@@ -1,18 +1,17 @@
 package nl.datavisual.domain.repo.custom.impl;
 
 
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import nl.datavisual.domain.repo.custom.UserRepositoryCustom;
 import nl.datavisual.domain.entity.*;
+import nl.datavisual.domain.repo.custom.UserRepositoryCustom;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,6 +30,45 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
         return userList;
     }
+
+    @Override
+    public List<User> findUsersByParams(String emailParam, String nameParam, Integer statusParam, String usernameParam, Integer companyId, Integer roleId) {
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        final QUser user = QUser.user;
+
+        List<Predicate> predicates = getFilterPredicates(emailParam, nameParam, statusParam, usernameParam, companyId, roleId, user);
+
+        List<User> userList = queryFactory.selectFrom(user)
+                .where(predicates.stream().toArray(Predicate[]::new)).fetch();
+
+        return userList;
+    }
+
+    private List<Predicate> getFilterPredicates(String emailParam, String nameParam, Integer statusParam, String usernameParam, Integer companyId, Integer roleId, QUser user) {
+        List<Predicate> predicates = new ArrayList<>();
+        if (!StringUtils.isEmpty(emailParam)) {
+            predicates.add(user.email.contains(emailParam));
+        }
+        if (!StringUtils.isEmpty(nameParam)) {
+            predicates.add(user.name.contains(nameParam));
+        }
+        if (!StringUtils.isEmpty(usernameParam)) {
+            predicates.add(user.username.contains(usernameParam));
+        }
+        if (statusParam != null) {
+            predicates.add(user.statusCode.eq(statusParam));
+        }
+        if (companyId != null) {
+            predicates.add(user.company.idCompanies.eq(companyId));
+        }
+        if (roleId != null) {
+            predicates.add(user.roles.any().idRoles.eq(roleId));
+        }
+
+        return predicates;
+    }
+
 
     public Company getCompanyByUsername(String username) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
@@ -78,7 +116,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         QRole role = new QRole("t");
 
 
-
         List<User> usersPerCompany = queryFactory
                 .selectFrom(user)
                 .leftJoin(user.roles, role)
@@ -107,15 +144,12 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         long rowsUpdated = queryFactory
                 .update(organisationSubunit)
                 .where(organisationSubunit.organizationUnit.company.users.any().username.eq(username))
-                .set(organisationSubunit.code,"updated_Code")
-                .set(organisationSubunit.name,"updated_Name")
+                .set(organisationSubunit.code, "updated_Code")
+                .set(organisationSubunit.name, "updated_Name")
                 .execute();
 
         return rowsUpdated;
     }
-
-
-
 
 
 }

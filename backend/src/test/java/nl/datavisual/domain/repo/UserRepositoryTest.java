@@ -5,7 +5,6 @@ import nl.datavisual.domain.entity.Company;
 import nl.datavisual.domain.entity.OrganizationSubunit;
 import nl.datavisual.domain.entity.Role;
 import nl.datavisual.domain.entity.User;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +13,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 //@DataJpaTest
-@Ignore
+
 public class UserRepositoryTest {
     public static final String USERNAME_1 = "username_1";
 
@@ -48,6 +45,53 @@ public class UserRepositoryTest {
         List<User> userList = userRepository.findUsersByEmailPart("1");
         assertNotNull(userList);
         assertEquals(3, userList.size());
+    }
+
+
+    @Test
+    public void shouldFilterUserByParams() {
+        String emailParamTestValue = "1";
+        List<User> userList = userRepository.findUsersByParams(emailParamTestValue, null, null, null, null, null);
+        assertNotNull(userList);
+        userList.forEach(user -> assertTrue(user.getEmail().contains(emailParamTestValue)));
+
+        int statusTestParam = 1;
+        userList = userRepository.findUsersByParams(emailParamTestValue, null, statusTestParam, null, null, null);
+        assertNotNull(userList);
+        userList.forEach(user -> {
+            assertTrue(user.getEmail().contains(emailParamTestValue));
+            assertEquals(statusTestParam, user.getStatusCode());
+        });
+
+        String usernameTestParam = "username_11";
+        userList = userRepository.findUsersByParams(emailParamTestValue, null, statusTestParam, usernameTestParam, null, null);
+        assertNotNull(userList);
+        userList.forEach(user -> {
+            assertTrue(user.getEmail().contains(emailParamTestValue));
+            assertEquals(statusTestParam, user.getStatusCode());
+            assertTrue(user.getUsername().contains(usernameTestParam));
+        });
+
+        int companyTestId = 11;
+        userList = userRepository.findUsersByParams(emailParamTestValue, null, statusTestParam, usernameTestParam, companyTestId, null);
+        assertNotNull(userList);
+        userList.forEach(user -> {
+            assertTrue(user.getEmail().contains(emailParamTestValue));
+            assertEquals(statusTestParam, user.getStatusCode());
+            assertTrue(user.getUsername().contains(usernameTestParam));
+            assertEquals(companyTestId, user.getCompany().getIdCompanies());
+        });
+
+        int roleTestId = 2;
+        userList = userRepository.findUsersByParams(emailParamTestValue, null, statusTestParam, usernameTestParam, companyTestId, roleTestId);
+        assertNotNull(userList);
+        userList.forEach(user -> {
+            assertTrue(user.getEmail().contains(emailParamTestValue));
+            assertEquals(statusTestParam, user.getStatusCode());
+            assertTrue(user.getUsername().contains(usernameTestParam));
+            assertEquals(companyTestId, user.getCompany().getIdCompanies());
+            assertTrue(user.getRoles().stream().anyMatch(role -> role.getIdRoles() == roleTestId));
+        });
     }
 
     @Test

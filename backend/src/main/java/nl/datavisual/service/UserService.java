@@ -25,15 +25,10 @@ public class UserService {
     }
 
     public List<User> searchUser(Integer companyId, Integer roleId, String email, String name, String username, Integer statusCode) {
-        log.debug("Search User by email = {}, name ={}, username = {}", email, name, username);
+        log.debug("Search User by email = {}, name ={}, username = {}, statusCode = {}, companyId = {}, roleId = {}", email, name, username, statusCode, companyId, roleId);
 
-        UserSpecificationsBuilder userSpecificationsBuilder = new UserSpecificationsBuilder()
-                .with("email", ":", email)
-                .with("name", ":", name)
-                .with("username", ":", username)
-                .with("statusCode", "<", statusCode);
-
-        List<User> users = null;
+             List<User> users = userRepository.findUsersByParams(email,name,statusCode,username,companyId,roleId)
+                     .stream().map(user -> modelMapper.map(user, User.class)).collect(Collectors.toList());
 //                userRepository.findAll(userSpecificationsBuilder.build()).stream()
 //                .map(user -> modelMapper.map(user, User.class)).collect(Collectors.toList());
         return users;

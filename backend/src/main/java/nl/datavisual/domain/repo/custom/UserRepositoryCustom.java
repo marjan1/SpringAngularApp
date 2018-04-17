@@ -23,4 +23,6 @@ public interface UserRepositoryCustom {
     void deleteById(long id);
 
     long updateOrganizationSubunitsForUserByUsername(String username);
+
+    List<User> findUsersByParams(String emailParam, String nameParam, Integer statusParam, String usernameParam, Integer companyId, Integer roleId);
 }
