@@ -14,13 +14,13 @@
   </thead>
   <tbody>
   <tr *ngFor="let company of companies">
-    <td class="hidden">{{ company.idCompanies }}</td>
-    <td>{{ company.companyName }}</td>
-    <td>{{ company.address }}</td>
-    <td>{{ company.expirationDate }}</td>
-    <td>{{ company.numberOfUsers }}</td>
-    <td>{{ company.phone }}</td>
-    <td>{{ company.statusCode === 1 ? 'Inactive' : 'Active' }}</td>
+    <td class="hidden">{{company.idCompanies}}</td>
+    <td>{{company.companyName}}</td>
+    <td>{{company.address}}</td>
+    <td>{{company.expirationDate}}</td>
+    <td>{{company.numberOfUsers}}</td>
+    <td>{{company.phone}}</td>
+    <td>{{company.statusCode === 1 ? 'Inactive' : 'Active'}}</td>
     <td>
       <button class="btn btn-success" (click)="openEditMode(company)">Edit</button>
     </td>

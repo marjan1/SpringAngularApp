@@ -5,7 +5,7 @@
   <div class="dropdown">
     <select>
       <option *ngFor="let company of companies" value={{company.idCompanies}}>
-        {{ company.companyName }}
+        {{company.companyName}}
       </option>
     </select>
   </div>
@@ -14,8 +14,8 @@
       <span class="caret"></span></button>
     <ul class="dropdown-menu">
       <li *ngFor="let company of companies">
-        <a href={{ company.idCompanies }}>
-          {{ company.companyName }}
+        <a href={{company.idCompanies}}>
+          {{company.companyName}}
         </a>
       </li>
 
@@ -36,10 +36,10 @@
     </thead>
     <tbody>
     <tr *ngFor="let user of users">
-      <td class="hidden">{{ user.idUsers }}</td>
-      <td>{{ user.name }}</td>
-      <td>{{ user.username }}</td>
-      <td>{{ user.email }}</td>
+      <td class="hidden">{{user.idUsers}}</td>
+      <td>{{user.name}}</td>
+      <td>{{user.username}}</td>
+      <td>{{user.email}}</td>
       <td>
         <button class="btn btn-danger" (click)="deleteUser(user)"> Delete User</button>
       </td>
