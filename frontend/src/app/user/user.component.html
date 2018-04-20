@@ -1,26 +1,26 @@
 <div class="col-md-6">
   <h2> User Details</h2>
 
+  <div class="col-md-3">
+    <label for="name">Name:</label>
+    <input type="text" [(ngModel)]="userSearch.name" name="name" class="form-control" id="name" (input)="startSearch()">
+  </div>
+  <div class="col-md-3">
+    <label for="username">Username:</label>
+    <input [(ngModel)]="userSearch.username" name="username" class="form-control" id="username"  (input)="startSearch()">
+  </div>
+  <div class="col-md-3">
+    <label for="email">Email address:</label>
+    <input type="email" [(ngModel)]="userSearch.email" name="email" class="form-control" id="email" (input)="startSearch()">
+  </div>
 
-  <div class="dropdown">
-    <select>
+  <div class="col-md-3">
+    <label for="email">Company:</label>
+    <select class="form-control" [(ngModel)]="companySelected"  >
       <option *ngFor="let company of companies" value={{company.idCompanies}}>
         {{company.companyName}}
       </option>
     </select>
-  </div>
-  <div class="dropdown">
-    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Company
-      <span class="caret"></span></button>
-    <ul class="dropdown-menu">
-      <li *ngFor="let company of companies">
-        <a href={{company.idCompanies}}>
-          {{company.companyName}}
-        </a>
-      </li>
-
-      <li><a href="#">JavaScript</a></li>
-    </ul>
   </div>
 
 
@@ -28,8 +28,8 @@
     <thead>
     <tr>
       <th class="hidden">Id</th>
-      <th>FirstName</th>
-      <th>LastName</th>
+      <th>Name</th>
+      <th>UserName</th>
       <th>Email</th>
       <th>Action</th>
     </tr>
